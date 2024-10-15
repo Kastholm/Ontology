@@ -4,7 +4,7 @@ exports.apis = void 0;
 const ontologiIRI = "https://pengehjoernet.dk/";
 exports.apis = [
     {
-        class: "Kategorier",
+        class: "kategorier",
         slug: "/kategorier",
         query: `
         *[_type == "category"] {
@@ -14,7 +14,7 @@ exports.apis = [
       }`,
     },
     {
-        class: "Tags",
+        class: "tags",
         slug: "/tags",
         query: `*[_type == "tag"] {
         _id,
@@ -23,7 +23,7 @@ exports.apis = [
       }`,
     },
     {
-        class: "Journalister",
+        class: "journalister",
         slug: "/journalister",
         query: `*[_type == "journalist"] {
         _id,
@@ -32,41 +32,41 @@ exports.apis = [
       }`,
     },
     {
-        class: "Artikler",
+        class: "artikel",
         slug: "",
         subClasses: [
             {
-                subClass: "ArtiklerUdenKategori",
-                restriction: "Kategorier",
+                subClass: "artikelUdenKategori",
+                restriction: "kategorier",
                 property: "harKategori",
             },
             {
-                subClass: "ArtiklerUdenJournalist",
-                restriction: "Journalister",
+                subClass: "artikelUdenJournalist",
+                restriction: "journalister",
                 property: "harJournalist",
             },
             {
-                subClass: "ArtiklerUdenTag",
-                restriction: "Tags",
+                subClass: "artikelUdenTag",
+                restriction: "tags",
                 property: "harTag",
             },
             {
-                subClass: "IkkePubliceretArtikel",
-                disJoint: ["PubliceretArtikel", "RepubliceretArtikel"],
+                subClass: "ikkePubliceretArtikel",
+                disJoint: ["publiceretArtikel", "republiceretArtikel"],
                 subClasses: [
                     {
-                        subClass: "PlanlagtArtikel",
-                        disJoint: ["PubliceretArtikel"],
+                        subClass: "planlagtArtikel",
+                        disJoint: ["publiceretArtikel"],
                     },
                 ],
             },
             {
-                subClass: "PubliceretArtikel",
-                disJoint: ["IkkePubliceretArtikel"],
+                subClass: "publiceretArtikel",
+                disJoint: ["ikkePubliceretArtikel"],
                 subClasses: [
                     {
-                        subClass: "RepubliceretArtikel",
-                        disJoint: ["IkkePubliceretArtikel"],
+                        subClass: "republiceretArtikel",
+                        disJoint: ["ikkePubliceretArtikel"],
                     },
                 ],
             },
@@ -78,19 +78,19 @@ exports.apis = [
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
-                        union: "Artikler",
+                        union: "artikel",
                     },
                     {
-                        union: "PubliceretArtikel",
+                        union: "publiceretArtikel",
                     },
                     {
-                        union: "RepubliceretArtikel",
+                        union: "republiceretArtikel",
                     },
                     {
-                        union: "IkkePubliceretArtikel",
+                        union: "ikkePubliceretArtikel",
                     },
                     {
-                        union: "PlanlagtArtikel",
+                        union: "planlagtArtikel",
                     },
                 ],
             },
@@ -100,16 +100,16 @@ exports.apis = [
                 range: `http://www.w3.org/2001/XMLSchema#dateTime`,
                 unionOf: [
                     {
-                        union: "Artikler",
+                        union: "artikel",
                     },
                     {
-                        union: "PubliceretArtikel",
+                        union: "publiceretArtikel",
                     },
                     {
-                        union: "RepubliceretArtikel",
+                        union: "republiceretArtikel",
                     },
                     {
-                        union: "PlanlagtArtikel",
+                        union: "planlagtArtikel",
                     },
                 ],
             },
@@ -119,13 +119,13 @@ exports.apis = [
                 range: `http://www.w3.org/2001/XMLSchema#integer`,
                 unionOf: [
                     {
-                        union: "Artikler",
+                        union: "artikel",
                     },
                     {
-                        union: "PubliceretArtikel",
+                        union: "publiceretArtikel",
                     },
                     {
-                        union: "RepubliceretArtikel",
+                        union: "republiceretArtikel",
                     },
                 ],
             },
@@ -135,10 +135,10 @@ exports.apis = [
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
-                        union: "Artikler",
+                        union: "artikel",
                     },
                     {
-                        union: "RepubliceretArtikel",
+                        union: "republiceretArtikel",
                     },
                 ],
             },
@@ -148,44 +148,44 @@ exports.apis = [
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
-                        union: "Artikler",
+                        union: "artikel",
                     },
                     {
-                        union: "RepubliceretArtikel",
+                        union: "republiceretArtikel",
                     },
                 ],
             },
             {
                 name: "harKategori",
                 type: "object",
-                range: `${ontologiIRI}Kategorier`,
+                range: `${ontologiIRI}kategorier`,
                 unionOf: [
-                    { union: "Artikler" },
-                    { union: "PubliceretArtikel" },
-                    { union: "RepubliceretArtikel" },
-                    { union: "PlanlagtArtikel" },
+                    { union: "artikel" },
+                    { union: "publiceretArtikel" },
+                    { union: "republiceretArtikel" },
+                    { union: "planlagtArtikel" },
                 ],
             },
             {
                 name: "harJournalist",
                 type: "object",
-                range: `${ontologiIRI}Journalister`,
+                range: `${ontologiIRI}journalister`,
                 unionOf: [
-                    { union: "Artikler" },
-                    { union: "PubliceretArtikel" },
-                    { union: "RepubliceretArtikel" },
-                    { union: "PlanlagtArtikel" },
+                    { union: "artikel" },
+                    { union: "publiceretArtikel" },
+                    { union: "republiceretArtikel" },
+                    { union: "planlagtArtikel" },
                 ],
             },
             {
                 name: "harTag",
                 type: "object",
-                range: `${ontologiIRI}Tags`,
+                range: `${ontologiIRI}tags`,
                 unionOf: [
-                    { union: "Artikler" },
-                    { union: "PubliceretArtikel" },
-                    { union: "RepubliceretArtikel" },
-                    { union: "PlanlagtArtikel" },
+                    { union: "artikel" },
+                    { union: "publiceretArtikel" },
+                    { union: "republiceretArtikel" },
+                    { union: "planlagtArtikel" },
                 ],
             },
         ],
