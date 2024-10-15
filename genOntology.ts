@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import {apis, apiModel, singleArticle} from "./ontologyData";
 const ontologiIRI: string =
-  "http://www.semanticweb.org/marc/ontologies/2024/8/pengehjoernetXML#";
+  "https://pengehjoernet.dk/";
 
 const generateClasses = () => {
   return apis
@@ -119,16 +119,15 @@ const sanitizeForXML = (str: string) => {
 const fetchCategories = async () => {
     let catNames = await getData(apis[0].query);
     let categoryXML: string = '';
+    let slug: string = 'kategori/';
     
     catNames.result.forEach((element: any, index: number) => {
-        const sanitizedName = sanitizeForXML(element.name);
-        categoryXML += `<owl:Class rdf:about="${ontologiIRI}${sanitizedName}">
+        categoryXML += `<owl:Class rdf:about="${ontologiIRI}${slug}${element.slug}">
         <rdfs:subClassOf rdf:resource="${ontologiIRI}${apis[0].class}"/>\n`;
         
             catNames.result.forEach((element: any, newIndex: number) => {
                 if (index !== newIndex) {
-                    const otherSanitizedName = sanitizeForXML(element.name);
-                    categoryXML += `<owl:disjointWith rdf:resource="${ontologiIRI}${otherSanitizedName}"/>\n`;
+                    categoryXML += `<owl:disjointWith rdf:resource="${ontologiIRI}${slug}${element.slug}"/>\n`;
                 }
             })
         
@@ -142,12 +141,12 @@ const fetchCategories = async () => {
 const fetchTags = async () => {
   let tagNames = await getData(apis[1].query);
   let tagXML: string = '';
+  let slug: string = 'tag/';
 
   tagNames.result.forEach((element: any) => {
-    const sanitizedName = sanitizeForXML(element.name);
       tagXML += 
           `
-          <owl:Class rdf:about="${ontologiIRI}${sanitizedName}_tag">
+          <owl:Class rdf:about="${ontologiIRI}${slug}${element.slug}">
           <rdfs:subClassOf rdf:resource="${ontologiIRI}${apis[1].class}"/>
           </owl:Class>
           `
@@ -158,11 +157,11 @@ const fetchTags = async () => {
   const fetchJournalists = async () => {
     let journalistNames = await getData(apis[2].query);
     let journalistXML: string = '';
+    let slug: string = 'journalist/';
 
     journalistNames.result.forEach((element: any) => {
-        const sanitizedName = sanitizeForXML(element.name);
         journalistXML += `
-        <owl:Class rdf:about="${ontologiIRI}${sanitizedName}">
+        <owl:Class rdf:about="${ontologiIRI}${slug}${element.slug}">
           <rdfs:subClassOf rdf:resource="${ontologiIRI}${apis[2].class}"/>
         </owl:Class>
             `
@@ -172,13 +171,12 @@ const fetchTags = async () => {
 
   const fetchArticles = async () => {
     let articles = await getData(apis[3].query);
-    
     let articleXML: string = '';
+    let slug: string = 'artikel/';
 
     articles.result.forEach((element: singleArticle) => {
-        const sanitizedTitle = sanitizeForXML(element.title)
         articleXML += 
-        `<owl:NamedIndividual rdf:about="${ontologiIRI}${sanitizedTitle}">\n` + 
+        `<owl:NamedIndividual rdf:about="${ontologiIRI}${slug}${element.slug}">\n` + 
         `<rdf:type rdf:resource="${ontologiIRI}Artikler"/>\n` +
         `<ontologi:harId rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element._id}</ontologi:harId>\n` +
         `${ element.views ? (
@@ -193,32 +191,34 @@ const fetchTags = async () => {
             `<rdf:type rdf:resource="${ontologiIRI}IkkePubliceretArtikel"/>\n` 
         ) }` +
         ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt}</ontologi:publiceringsDato>\n` +
-        `${ element.category ? (
-            `<rdf:type rdf:resource="${ontologiIRI}${sanitizeForXML(element.category)}"/>\n`
+        `${ element.categorySlug ? (
+            `<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`
         ) : (
             `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenKategori"/>\n`
         ) }` +
-        `${ element.JournalistName ? (
-            `<rdf:type rdf:resource="${ontologiIRI}${sanitizeForXML(element.JournalistName)}"/>\n`
+        `${ element.JournalistSlug ? (
+            `<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>\n`
         ) : (
             `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenJournalist"/>\n`
         )}` +
-        `${ element.tag ? (
-                element.tag.map((tag) => (
-                    `<rdf:type rdf:resource="${ontologiIRI}${sanitizeForXML(tag)}_tag"/>\n`
+        `${ element.tagSlug ? (
+                element.tagSlug.map((tag) => (
+                  tag === null ? (
+                  `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`
+                  ) : (`<rdf:type rdf:resource="${ontologiIRI}tag/${tag}"/>\n`)
                 )).join('')
             ) : (
                 `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`
             )}` +
         `${ element.republishArticle && element.newSlug ? (
             `<rdf:type rdf:resource="${ontologiIRI}RepubliceretArtikel"/>
-             <ontologi:harNytSlug rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${sanitizeForXML(element.newSlug)}</ontologi:harNytSlug>\n`
+             <ontologi:harNytSlug rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element.newSlug}</ontologi:harNytSlug>\n`
         ) : (
           ''
         )}` +
         `${ element.oldSlugs ? (
             element.oldSlugs.map((slug) => {
-              `<ontologi:harGammelSlug rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${sanitizeForXML(slug)}</ontologi:harGammelSlug>\n`
+              `<ontologi:harGammelSlug rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${slug}</ontologi:harGammelSlug>\n`
             }).join('')
         ) : (
           ''

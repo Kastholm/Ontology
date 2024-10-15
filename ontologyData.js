@@ -5,6 +5,7 @@ const ontologiIRI = "http://www.semanticweb.org/marc/ontologies/2024/8/pengehjoe
 exports.apis = [
     {
         class: "Kategorier",
+        slug: "/kategorier",
         query: `
         *[_type == "category"] {
         _id,
@@ -14,6 +15,7 @@ exports.apis = [
     },
     {
         class: "Tags",
+        slug: "/tags",
         query: `*[_type == "tag"] {
         _id,
         name,
@@ -22,6 +24,7 @@ exports.apis = [
     },
     {
         class: "Journalister",
+        slug: "/journalister",
         query: `*[_type == "journalist"] {
         _id,
         name,
@@ -30,6 +33,7 @@ exports.apis = [
     },
     {
         class: "Artikler",
+        slug: "",
         subClasses: [
             {
                 subClass: "ArtiklerUdenKategori",
@@ -139,8 +143,11 @@ exports.apis = [
             "oldSlugs": oldSlugs[], 
             republishArticle,
             "category": category->name,
+            "categorySlug": category->slug.current,
             "tag": tag[]->name,
+            "tagSlug": tag[]->slug.current,
             "JournalistName": journalist->name,
+            "JournalistSlug": journalist->slug.current,
             isPublished,
             previewMode,
             views

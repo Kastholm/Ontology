@@ -3,6 +3,7 @@ const ontologiIRI: string =
 
 export interface apiModel {
   class: string;
+  slug: string;
   subClasses?: Array<{
     subClass: string;
     disJoint?: string[];
@@ -27,6 +28,7 @@ export interface apiModel {
 export const apis: apiModel[] = [
   {
     class: "Kategorier",
+    slug: "/kategorier",
     query: `
         *[_type == "category"] {
         _id,
@@ -36,6 +38,7 @@ export const apis: apiModel[] = [
   },
   {
     class: "Tags",
+    slug: "/tags",
     query:  
     `*[_type == "tag"] {
         _id,
@@ -45,6 +48,7 @@ export const apis: apiModel[] = [
   },
   {
     class: "Journalister",
+    slug: "/journalister",
     query: 
     `*[_type == "journalist"] {
         _id,
@@ -54,6 +58,7 @@ export const apis: apiModel[] = [
   },
   {
     class: "Artikler",
+    slug: "",
     subClasses: [
       {
         subClass: "ArtiklerUdenKategori",
@@ -163,8 +168,11 @@ export const apis: apiModel[] = [
             "oldSlugs": oldSlugs[], 
             republishArticle,
             "category": category->name,
+            "categorySlug": category->slug.current,
             "tag": tag[]->name,
+            "tagSlug": tag[]->slug.current,
             "JournalistName": journalist->name,
+            "JournalistSlug": journalist->slug.current,
             isPublished,
             previewMode,
             views
@@ -180,7 +188,7 @@ export interface singleArticle {
     _type: string;
     title: string;
     teaser: string;
-    articleSlug: string | '';
+    slug: string | '';
     newSlug: string | '';
     oldSlugs: string[];
     republishArticle: boolean;
