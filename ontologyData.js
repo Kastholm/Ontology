@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.apis = void 0;
-const ontologiIRI = "http://www.semanticweb.org/marc/ontologies/2024/8/pengehjoernetXML#";
+const ontologiIRI = "https://pengehjoernet.dk/";
 exports.apis = [
     {
         class: "Kategorier",
@@ -38,14 +38,17 @@ exports.apis = [
             {
                 subClass: "ArtiklerUdenKategori",
                 restriction: "Kategorier",
+                property: "harKategori",
             },
             {
                 subClass: "ArtiklerUdenJournalist",
                 restriction: "Journalister",
+                property: "harJournalist",
             },
             {
                 subClass: "ArtiklerUdenTag",
                 restriction: "Tags",
+                property: "harTag",
             },
             {
                 subClass: "IkkePubliceretArtikel",
@@ -53,9 +56,9 @@ exports.apis = [
                 subClasses: [
                     {
                         subClass: "PlanlagtArtikel",
-                        disJoint: ["PubliceretArtikel"]
-                    }
-                ]
+                        disJoint: ["PubliceretArtikel"],
+                    },
+                ],
             },
             {
                 subClass: "PubliceretArtikel",
@@ -63,14 +66,15 @@ exports.apis = [
                 subClasses: [
                     {
                         subClass: "RepubliceretArtikel",
-                        disJoint: ["IkkePubliceretArtikel"]
-                    }
-                ]
+                        disJoint: ["IkkePubliceretArtikel"],
+                    },
+                ],
             },
         ],
         properties: [
             {
                 name: "harId",
+                type: "data",
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
@@ -80,12 +84,19 @@ exports.apis = [
                         union: "PubliceretArtikel",
                     },
                     {
+                        union: "RepubliceretArtikel",
+                    },
+                    {
                         union: "IkkePubliceretArtikel",
+                    },
+                    {
+                        union: "PlanlagtArtikel",
                     },
                 ],
             },
             {
                 name: "publiceringsDato",
+                type: "data",
                 range: `http://www.w3.org/2001/XMLSchema#dateTime`,
                 unionOf: [
                     {
@@ -94,10 +105,17 @@ exports.apis = [
                     {
                         union: "PubliceretArtikel",
                     },
+                    {
+                        union: "RepubliceretArtikel",
+                    },
+                    {
+                        union: "PlanlagtArtikel",
+                    },
                 ],
             },
             {
                 name: "antalVisninger",
+                type: "data",
                 range: `http://www.w3.org/2001/XMLSchema#integer`,
                 unionOf: [
                     {
@@ -106,30 +124,68 @@ exports.apis = [
                     {
                         union: "PubliceretArtikel",
                     },
+                    {
+                        union: "RepubliceretArtikel",
+                    },
                 ],
             },
             {
                 name: "harNytSlug",
+                type: "data",
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
                         union: "Artikler",
                     },
                     {
-                        union: "PubliceretArtikel",
+                        union: "RepubliceretArtikel",
                     },
                 ],
             },
             {
                 name: "harGammelSlug",
+                type: "data",
                 range: `http://www.w3.org/2001/XMLSchema#string`,
                 unionOf: [
                     {
                         union: "Artikler",
                     },
                     {
-                        union: "PubliceretArtikel",
+                        union: "RepubliceretArtikel",
                     },
+                ],
+            },
+            {
+                name: "harKategori",
+                type: "object",
+                range: `${ontologiIRI}Kategorier`,
+                unionOf: [
+                    { union: "Artikler" },
+                    { union: "PubliceretArtikel" },
+                    { union: "RepubliceretArtikel" },
+                    { union: "PlanlagtArtikel" },
+                ],
+            },
+            {
+                name: "harJournalist",
+                type: "object",
+                range: `${ontologiIRI}Journalister`,
+                unionOf: [
+                    { union: "Artikler" },
+                    { union: "PubliceretArtikel" },
+                    { union: "RepubliceretArtikel" },
+                    { union: "PlanlagtArtikel" },
+                ],
+            },
+            {
+                name: "harTag",
+                type: "object",
+                range: `${ontologiIRI}Tags`,
+                unionOf: [
+                    { union: "Artikler" },
+                    { union: "PubliceretArtikel" },
+                    { union: "RepubliceretArtikel" },
+                    { union: "PlanlagtArtikel" },
                 ],
             },
         ],

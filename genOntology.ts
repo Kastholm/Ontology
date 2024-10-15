@@ -32,7 +32,7 @@ const generateSubClasses = () => {
                 <owl:complementOf>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="${ontologiIRI}${subClass.restriction}"/>
-                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${element.class}"/>
+                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${subClass.property}"/>
                     </owl:Restriction>
                 </owl:complementOf>
                 `
@@ -60,12 +60,13 @@ const generateSubClasses = () => {
 };
 const XmlSubClasses = generateSubClasses();
 
+
 const generateProperties = () => {
   return apis
     .filter((element: apiModel) => element.properties)
     .map((element: apiModel) => {
       return element.properties!.map((element) => {
-        let propertyXML = `<owl:ObjectProperty rdf:about="${ontologiIRI}${element.name}">
+        let propertyXML = `<owl:${element.type === 'data' ? 'Datatype' : 'Object'}Property rdf:about="${ontologiIRI}${element.name}">
                 <rdfs:domain>
                     <owl:Class>
                         <owl:unionOf rdf:parseType="Collection">`;
@@ -80,13 +81,12 @@ const generateProperties = () => {
             element.inverseOf ? (`<owl:inverseOf rdf:resource="${element.inverseOf}"/>`) :
             '' 
         }
-    </owl:ObjectProperty>\n`;
+    </owl:${element.type === 'data' ? 'Datatype' : 'Object'}Property>\n`;
         return propertyXML;
       }).join('');
     }).join('');
 };
 const XmlProperties = generateProperties();
-
 
 
 async function getData(query: string) {
@@ -192,12 +192,14 @@ const fetchTags = async () => {
         ) }` +
         ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt}</ontologi:publiceringsDato>\n` +
         `${ element.categorySlug ? (
-            `<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`
+          `<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>
+           <ontologi:harKategori rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`
         ) : (
             `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenKategori"/>\n`
         ) }` +
         `${ element.JournalistSlug ? (
-            `<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>\n`
+            `<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>
+             <ontologi:harJournalist rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>\n`
         ) : (
             `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenJournalist"/>\n`
         )}` +
@@ -205,7 +207,10 @@ const fetchTags = async () => {
                 element.tagSlug.map((tag) => (
                   tag === null ? (
                   `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`
-                  ) : (`<rdf:type rdf:resource="${ontologiIRI}tag/${tag}"/>\n`)
+                  ) : (
+                        `<rdf:type rdf:resource="${ontologiIRI}tag/${tag}"/>\n` +
+                         `<ontologi:harTag rdf:resource="${ontologiIRI}tag/${tag}"/>\n`
+                      )
                 )).join('')
             ) : (
                 `<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`

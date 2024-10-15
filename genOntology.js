@@ -36,7 +36,7 @@ const generateSubClasses = () => {
                 <owl:complementOf>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="${ontologiIRI}${subClass.restriction}"/>
-                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${element.class}"/>
+                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${subClass.property}"/>
                     </owl:Restriction>
                 </owl:complementOf>
                 `
@@ -59,7 +59,7 @@ const generateProperties = () => {
         .filter((element) => element.properties)
         .map((element) => {
         return element.properties.map((element) => {
-            let propertyXML = `<owl:ObjectProperty rdf:about="${ontologiIRI}${element.name}">
+            let propertyXML = `<owl:${element.type === 'data' ? 'Datatype' : 'Object'}Property rdf:about="${ontologiIRI}${element.name}">
                 <rdfs:domain>
                     <owl:Class>
                         <owl:unionOf rdf:parseType="Collection">`;
@@ -72,7 +72,7 @@ const generateProperties = () => {
         ${element.range ? (`<rdfs:range rdf:resource="${element.range}"/>`) :
                 element.inverseOf ? (`<owl:inverseOf rdf:resource="${element.inverseOf}"/>`) :
                     ''}
-    </owl:ObjectProperty>\n`;
+    </owl:${element.type === 'data' ? 'Datatype' : 'Object'}Property>\n`;
             return propertyXML;
         }).join('');
     }).join('');
@@ -156,9 +156,12 @@ const fetchArticles = () => __awaiter(void 0, void 0, void 0, function* () {
                 `${element.views ? (`<ontologi:antalVisninger rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element.views}</ontologi:antalVisninger>\n`) : (`<ontologi:antalVisninger rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</ontologi:antalVisninger>\n`)}` +
                 `${element.isPublished !== 0 && !element.previewMode ? (`<rdf:type rdf:resource="${ontologiIRI}PubliceretArtikel"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}IkkePubliceretArtikel"/>\n`)}` +
                 ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt}</ontologi:publiceringsDato>\n` +
-                `${element.categorySlug ? (`<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenKategori"/>\n`)}` +
-                `${element.JournalistSlug ? (`<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenJournalist"/>\n`)}` +
-                `${element.tagSlug ? (element.tagSlug.map((tag) => (tag === null ? (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}tag/${tag}"/>\n`))).join('')) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`)}` +
+                `${element.categorySlug ? (`<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>
+           <ontologi:harKategori rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenKategori"/>\n`)}` +
+                `${element.JournalistSlug ? (`<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>
+             <ontologi:harJournalist rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenJournalist"/>\n`)}` +
+                `${element.tagSlug ? (element.tagSlug.map((tag) => (tag === null ? (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}tag/${tag}"/>\n` +
+                    `<ontologi:harTag rdf:resource="${ontologiIRI}tag/${tag}"/>\n`))).join('')) : (`<rdf:type rdf:resource="${ontologiIRI}ArtiklerUdenTag"/>\n`)}` +
                 `${element.republishArticle && element.newSlug ? (`<rdf:type rdf:resource="${ontologiIRI}RepubliceretArtikel"/>
              <ontologi:harNytSlug rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element.newSlug}</ontologi:harNytSlug>\n`) : ('')}` +
                 `${element.oldSlugs ? (element.oldSlugs.map((slug) => {
