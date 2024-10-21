@@ -31,8 +31,8 @@ const generateSubClasses = () => {
               ? `
                 <owl:complementOf>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="${ontologiIRI}${subClass.restriction}"/>
-                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${subClass.property}"/>
+                        <owl:onProperty rdf:resource="${ontologiIRI}${subClass.property}"/>
+                        <owl:someValuesFrom rdf:resource="${ontologiIRI}${subClass.restriction}"/>
                     </owl:Restriction>
                 </owl:complementOf>
                 `
