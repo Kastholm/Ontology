@@ -155,7 +155,8 @@ const fetchArticles = () => __awaiter(void 0, void 0, void 0, function* () {
                 `<ontologi:harId rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element._id}</ontologi:harId>\n` +
                 `${element.views ? (`<ontologi:antalVisninger rdf:datatype="http://www.w3.org/2001/XMLSchema#string">${element.views}</ontologi:antalVisninger>\n`) : (`<ontologi:antalVisninger rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0</ontologi:antalVisninger>\n`)}` +
                 `${element.isPublished !== 0 && !element.previewMode ? (`<rdf:type rdf:resource="${ontologiIRI}publiceretArtikel"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}ikkePubliceretArtikel"/>\n`)}` +
-                ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt}</ontologi:publiceringsDato>\n` +
+                ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt.substring(0, 10)}</ontologi:publiceringsDato>\n` +
+                `${new Date(element.publishedAt) > new Date() && (`<rdf:type rdf:resource="${ontologiIRI}planlagtArtikel"/>`)}` +
                 `${element.categorySlug ? (`<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>
            <ontologi:harKategori rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`) : (`<rdf:type rdf:resource="${ontologiIRI}artikelUdenKategori"/>\n`)}` +
                 `${element.JournalistSlug ? (`<rdf:type rdf:resource="${ontologiIRI}journalist/${element.JournalistSlug}"/>

@@ -190,7 +190,10 @@ const fetchTags = async () => {
         ) : ( 
             `<rdf:type rdf:resource="${ontologiIRI}ikkePubliceretArtikel"/>\n` 
         ) }` +
-        ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt}</ontologi:publiceringsDato>\n` +
+        ` <ontologi:publiceringsDato rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">${element.publishedAt.substring(0, 10)}</ontologi:publiceringsDato>\n` +
+        `${ new Date(element.publishedAt) > new Date() && (
+          `<rdf:type rdf:resource="${ontologiIRI}planlagtArtikel"/>`
+        )}` +
         `${ element.categorySlug ? (
           `<rdf:type rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>
            <ontologi:harKategori rdf:resource="${ontologiIRI}kategori/${element.categorySlug}"/>\n`
