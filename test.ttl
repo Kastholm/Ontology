@@ -1,0 +1,31 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ontologi: <https://pengehjoernet.dk/ontologi#> .
+@prefix ex: <https://pengehjoernet.dk/> .
+
+# Definition af en klasse
+ex:artiklerUdenJournalist rdf:type owl:Class ;
+    rdfs:subClassOf ex:artikel .
+
+# Definerer egenskaber
+ex:harKategori rdf:type owl:ObjectProperty ;
+    rdfs:domain ex:artikel ;
+    rdfs:range ex:kategori .
+
+ex:harTag rdf:type owl:ObjectProperty ;
+    rdfs:domain ex:artikel ;
+    rdfs:range ex:tag .
+
+# Individ af typen artikel
+ex:artikel-tryg-afslrer-imponerende-indtjeningsrapport rdf:type ex:artikel, ex:publiceretArtikel ;
+    ontologi:harId "a7ed6e23-8166-4916-8dc0-2910d30321a4"^^xsd:string ;
+    ontologi:antalVisninger "30"^^xsd:string ;
+    ontologi:publiceringsDato "2024-08-30"^^xsd:dateTime ;
+    ontologi:harKategori ex:kategori/nyheder ;
+    ontologi:harJournalist ex:journalist/lucas-hedegaard-olsen ;
+    ontologi:harTag ex:tag/nyheder, 
+                    ex:tag/indtjeningsrapport, 
+                    ex:tag/investering, 
+                    ex:tag/tryg .
