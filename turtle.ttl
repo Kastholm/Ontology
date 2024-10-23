@@ -1,0 +1,14 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <https://pengehjoernet.dk/> .
+@prefix article: <https://pengehjoernet.dk/artikel/> .
+@prefix kategori: <https://pengehjoernet.dk/kategori/> .
+@prefix journalist: <https://pengehjoernet.dk/journalist/> .
+@prefix tag: <https://pengehjoernet.dk/tag/> .
+#Classes
+ex:kategorier rdf:type owl:Class .
+ex:tags rdf:type owl:Class .
+ex:journalister rdf:type owl:Class .
+ex:artikel rdf:type owl:Class .

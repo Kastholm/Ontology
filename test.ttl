@@ -1,13 +1,55 @@
+#Subject / pr / ob
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix ontologi: <https://pengehjoernet.dk/ontologi#> .
 @prefix ex: <https://pengehjoernet.dk/> .
+@prefix article: <https://pengehjoernet.dk/artikel/> .
+@prefix kategori: <https://pengehjoernet.dk/kategori/> .
+@prefix journalist: <https://pengehjoernet.dk/journalist/> .
+@prefix tag: <https://pengehjoernet.dk/tag/> .
 
 # Definition af en klasse
+
+ex:artikel rdf:type owl:Class .
+ex:kategori rdf:type owl:Class .
+ex:tag rdf:type owl:Class .
+ex:journalist rdf:type owl:Class .
+
 ex:artiklerUdenJournalist rdf:type owl:Class ;
     rdfs:subClassOf ex:artikel .
+
+ex:ikkePubliceretArtikel rdf:type owl:Class ;
+    rdfs:subClassOf ex:artikel .
+ex:planlagtArtikel rdf:type owl:Class ;
+    rdfs:subClassOf ex:ikkePubliceretArtikel .
+
+ex:publiceretArtikel rdf:type owl:Class ;
+    rdfs:subClassOf ex:artikel ;
+    owl:disjointWith ex:ikkePubliceretArtikel .
+ex:republiceretArtikel rdf:type owl:Class ;
+    rdfs:subClassOf ex:publiceretArtikel .
+
+kategori:nyheder rdf:type owl:Class ;
+    rdfs:subClassOf ex:kategori .
+
+tag:nyheder rdf:type owl:Class ;
+    rdfs:subClassOf ex:tag .
+
+journalist:nicklas-absalonsen rdf:type owl:Class ;
+    rdfs:subClassOf ex:journalist .
+
+article:gode-tips-til-at-opleve-tour-de-france a ex:artikel ,
+        kategori:nyheder ,
+        journalist:nicklas-absalonsen ,
+        tag:nyheder ;
+    ex:harId "d306e7ae-11a0-4eba-be71-bcd9dbe01fcc"^^xsd:string ;
+    ex:antalVisninger "83"^^xsd:string ;
+    ex:publiceringsDato "2024-07-03"^^xsd:dateTime ;
+    ex:harKategori kategori:nyheder ;
+    ex:harJournalist journalist:nicklas-absalonsen ;
+    ex:harTag tag:nyheder .
+
 
 # Definerer egenskaber
 ex:harKategori rdf:type owl:ObjectProperty ;
@@ -17,15 +59,3 @@ ex:harKategori rdf:type owl:ObjectProperty ;
 ex:harTag rdf:type owl:ObjectProperty ;
     rdfs:domain ex:artikel ;
     rdfs:range ex:tag .
-
-# Individ af typen artikel
-ex:artikel-tryg-afslrer-imponerende-indtjeningsrapport rdf:type ex:artikel, ex:publiceretArtikel ;
-    ontologi:harId "a7ed6e23-8166-4916-8dc0-2910d30321a4"^^xsd:string ;
-    ontologi:antalVisninger "30"^^xsd:string ;
-    ontologi:publiceringsDato "2024-08-30"^^xsd:dateTime ;
-    ontologi:harKategori ex:kategori/nyheder ;
-    ontologi:harJournalist ex:journalist/lucas-hedegaard-olsen ;
-    ontologi:harTag ex:tag/nyheder, 
-                    ex:tag/indtjeningsrapport, 
-                    ex:tag/investering, 
-                    ex:tag/tryg .
