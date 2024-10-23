@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "init": "npm i && pip install rdflib",
     "start": "tsc && node genOntology.js && python convert.py"
   },
   "dependencies": {
