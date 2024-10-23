@@ -1,4 +1,5 @@
 from rdflib import Graph, Namespace
+import json
 
 # Opret en ny Graph instans
 g = Graph()
@@ -18,3 +19,54 @@ g.parse("output.xml", format="xml")
 
 # Gem som Turtle format
 g.serialize("output.ttl", format="turtle")
+
+
+g.parse("output.ttl", format="turtle")
+
+query = """
+SELECT ?article WHERE {
+   ?article a ex:publiceretArtikel ,
+              ex:artikelUdenKategori .
+} LIMIT 100
+"""
+
+result = g.query(query)
+noCategories = []
+for row in result:
+        article_url = str(row.article)
+        noCategories.append(article_url)
+
+with open('./data/noCategories.json', 'w') as file:
+    json.dump(noCategories, file, indent=2)
+
+
+query = """
+SELECT ?article WHERE {
+   ?article a ex:publiceretArtikel ,
+              ex:artikelUdenTag .
+} LIMIT 100
+"""
+
+result = g.query(query)
+noTags = []
+for row in result:
+        article_url = str(row.article)
+        noTags.append(article_url)
+
+with open('./data/noTags.json', 'w') as file:
+    json.dump(noTags, file, indent=2)
+
+query = """
+SELECT ?article WHERE {
+   ?article a ex:publiceretArtikel ,
+              ex:artikelUdenJournalist .
+} LIMIT 100
+"""
+result = g.query(query)
+noJournalists = []
+for row in result:
+        article_url = str(row.article)
+        noJournalists.append(article_url)
+
+with open('./data/noJournalists.json', 'w') as file:
+    json.dump(noJournalists, file, indent=2)
