@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "start": "tsc && node genOntology.js",
-    "turtle": "tsc && node genTurtle.js"
+    "start": "tsc && node genOntology.js && python convert.py"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
