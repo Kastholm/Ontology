@@ -27,7 +27,7 @@ query = """
 SELECT ?article WHERE {
    ?article a ex:publiceretArtikel ,
               ex:artikelUdenKategori .
-} LIMIT 100
+}
 """
 
 result = g.query(query)
@@ -44,7 +44,7 @@ query = """
 SELECT ?article WHERE {
    ?article a ex:publiceretArtikel ,
               ex:artikelUdenTag .
-} LIMIT 100
+}
 """
 
 result = g.query(query)
@@ -60,7 +60,7 @@ query = """
 SELECT ?article WHERE {
    ?article a ex:publiceretArtikel ,
               ex:artikelUdenJournalist .
-} LIMIT 100
+}
 """
 result = g.query(query)
 noJournalists = []

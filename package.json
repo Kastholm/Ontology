@@ -1,7 +1,8 @@
 {
   "scripts": {
     "init": "npm i && pip install rdflib",
-    "start": "tsc && node genOntology.js && python convert.py"
+    "start": "tsc && node genOntology.js && python convert.py",
+    "macstart": "tsc && node genOntology.js && python3 convert.py"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

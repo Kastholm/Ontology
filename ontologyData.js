@@ -75,7 +75,7 @@ exports.apis = [
             {
                 name: "harId",
                 type: "data",
-                range: `http://www.w3.org/2001/XMLSchema#string`,
+                range: `http://www.w3.org/2001/XMLSchema#integer`,
                 unionOf: [
                     {
                         union: "artikel",
