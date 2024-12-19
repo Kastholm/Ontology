@@ -70,3 +70,37 @@ for row in result:
 
 with open('./data/noJournalists.json', 'w') as file:
     json.dump(noJournalists, file, indent=2)
+
+query = """
+SELECT ?article
+WHERE {
+  ?article a ex:publiceretArtikel.
+  FILTER(REGEX(STR(?article), "hvad-tjener-en", "i"))
+}
+"""
+result = g.query(query)
+specificArticle = []
+for row in result:
+        article_url = str(row.article)
+        specificArticle.append(article_url)
+
+with open('./data/specificArticle.json', 'w') as file:
+    json.dump(specificArticle, file, indent=2)
+
+
+query = """
+SELECT (COUNT(?article) AS ?antalArtikler)
+WHERE {
+  ?article a ex:publiceretArtikel.
+  FILTER(REGEX(STR(?article), "hvad-tjener-en", "i"))
+}
+"""
+result = g.query(query)
+specificArticleAmount = []
+for row in result:
+    count = str(row.antalArtikler)
+    specificArticleAmount.append(count)
+
+
+with open('./data/specificArticleAmount.json', 'w') as file:
+    json.dump(specificArticleAmount, file, indent=2)
